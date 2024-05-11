@@ -15,7 +15,7 @@ const MP3Playlist = () => {
 
   const fetchPlaylist = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/playlist');
+      const response = await fetch('http://192.168.1.8:5000/api/playlist');      ;
       const data = await response.json();
       setPlaylist(data.playlist);
     } catch (error) {
