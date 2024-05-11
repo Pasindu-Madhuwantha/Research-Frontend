@@ -11,15 +11,15 @@ const LoFiMusicCustomizer = () => {
 
   const fetchPaths = async () => {
     try {
-      const vinylsResponse = await fetch('http://localhost:5000/api/vinyls');
+      const vinylsResponse = await fetch('http://localhost:8080/api/vinyls');
       const vinylsData = await vinylsResponse.json();
       setVinyls(vinylsData.paths);
 
-      const drumsResponse = await fetch('http://localhost:5000/api/drums');
+      const drumsResponse = await fetch('http://localhost:8080/api/drums');
       const drumsData = await drumsResponse.json();
       setDrums(drumsData.paths);
 
-      const weatherResponse = await fetch('http://localhost:5000/api/weather');
+      const weatherResponse = await fetch('http://localhost:8080/api/weather');
       const weatherData = await weatherResponse.json();
       setWeather(weatherData.paths);
     } catch (error) {
