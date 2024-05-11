@@ -1,28 +1,28 @@
-# Use a Node.js base image
-FROM node:14-alpine
+# Use Node.js as the base image
+FROM node:alpine as builder
 
-# Set the working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
-# Copy the app source code
+# Copy the entire project to the working directory
 COPY . .
 
-# Build the React app
+# Build the React app for production
 RUN npm run build
 
-# Use a lightweight web server to serve the built app
-FROM nginx:1.19-alpine
+# Use Nginx as the base image for serving the static files
+FROM nginx:alpine
 
-# Copy the built app from the previous stage
-COPY --from=0 /app/build /usr/share/nginx/html
+# Copy the built app from the previous stage to the Nginx container
+COPY --from=builder /app/build /usr/share/nginx/html
 
-# Expose the port that Nginx will listen on
+# Expose port 80
 EXPOSE 80
 
 # Start Nginx
