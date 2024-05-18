@@ -14,14 +14,19 @@ const MP3Playlist = () => {
   const [currentTime, setCurrentTime] = useState(0);
 
   const fetchPlaylist = async () => {
-    try {
-      const response = await fetch('/api/playlist');
+  try {
+      const response = await fetch('/api/playlist',{
+        headers: {
+          'ngrok-skip-browser-warning': '34'
+        }
+      });
       const data = await response.json();
       setPlaylist(data.playlist);
     } catch (error) {
       console.error('Error:', error);
     }
   };
+
 
   useEffect(() => {
     fetchPlaylist();
