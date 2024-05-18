@@ -11,15 +11,27 @@ const LoFiMusicCustomizer = () => {
 
   const fetchPaths = async () => {
     try {
-      const vinylsResponse = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/vinyls');
+      const vinylsResponse = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/vinyls', {
+        headers: {
+          'ngrok-skip-browser-warning': '4567'
+        }
+      });
       const vinylsData = await vinylsResponse.json();
       setVinyls(vinylsData.paths);
 
-      const drumsResponse = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/drums');
+      const drumsResponse = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/drums', {
+        headers: {
+          'ngrok-skip-browser-warning': '4567'
+        }
+      });
       const drumsData = await drumsResponse.json();
       setDrums(drumsData.paths);
 
-      const weatherResponse = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/weather');
+      const weatherResponse = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/weather', {
+        headers: {
+          'ngrok-skip-browser-warning': '4567'
+        }
+      });
       const weatherData = await weatherResponse.json();
       setWeather(weatherData.paths);
     } catch (error) {
@@ -53,30 +65,33 @@ const LoFiMusicCustomizer = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-  
+
     setShowMessage(true);
-  
+
     // Set default values for sounds if they are not selected
     const updatedWeatherSound = weatherSound || defaultWeatherSound;
     const updatedDrumsSound = drumsSound || defaultDrumsSound;
     const updatedVinylSound = vinylSound || defaultVinylSound;
-  
+
     const formData = new FormData();
     formData.append('midiFile', event.target.elements.midiFile.files[0]);
     formData.append('weatherSound', updatedWeatherSound);
     formData.append('drumsSound', updatedDrumsSound);
     formData.append('vinylSound', updatedVinylSound);
-  
+
     try {
       const response = await fetch('https://crucial-brightly-monster.ngrok-free.app/upload', {
         method: 'POST',
+        headers: {
+          'ngrok-skip-browser-warning': '4567'
+        },
         body: formData,
       });
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-  
+
       // Handle success if needed
     } catch (error) {
       console.error('Error:', error);

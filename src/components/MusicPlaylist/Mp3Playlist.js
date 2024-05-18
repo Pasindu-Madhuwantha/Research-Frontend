@@ -14,8 +14,8 @@ const MP3Playlist = () => {
   const [currentTime, setCurrentTime] = useState(0);
 
   const fetchPlaylist = async () => {
-  try {
-      const response = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/playlist',{
+    try {
+      const response = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/playlist', {
         headers: {
           'ngrok-skip-browser-warning': '4567'
         }
@@ -26,7 +26,6 @@ const MP3Playlist = () => {
       console.error('Error:', error);
     }
   };
-
 
   useEffect(() => {
     fetchPlaylist();
@@ -39,7 +38,11 @@ const MP3Playlist = () => {
   }, []);
 
   const fetchAudioBlob = async (mp3File) => {
-    const response = await fetch(`https://crucial-brightly-monster.ngrok-free.app/api/play?file=${encodeURIComponent(mp3File)}`);
+    const response = await fetch(`https://crucial-brightly-monster.ngrok-free.app/api/play?file=${encodeURIComponent(mp3File)}`, {
+      headers: {
+        'ngrok-skip-browser-warning': '4567'
+      }
+    });
     const blob = await response.blob();
     return URL.createObjectURL(blob);
   };
