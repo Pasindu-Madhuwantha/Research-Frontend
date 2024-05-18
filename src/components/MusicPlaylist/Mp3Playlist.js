@@ -15,9 +15,9 @@ const MP3Playlist = () => {
 
   const fetchPlaylist = async () => {
   try {
-      const response = await fetch('/api/playlist',{
+      const response = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/playlist',{
         headers: {
-          'ngrok-skip-browser-warning': '34'
+          'ngrok-skip-browser-warning': '4567'
         }
       });
       const data = await response.json();
