@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import music2 from '../../images/music3.gif';
 import './style.css';
+import { customFetch } from '../CustomFetch/customFetch';
 
 const MP3Playlist = () => {
   const [playlist, setPlaylist] = useState([]);
@@ -15,12 +16,7 @@ const MP3Playlist = () => {
 
   const fetchPlaylist = async () => {
     try {
-      const response = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/playlist', {
-        headers: {
-          'ngrok-skip-browser-warning': '4567'
-        }
-      });
-      const data = await response.json();
+      const data = await customFetch('/api/playlist');
       setPlaylist(data.playlist);
     } catch (error) {
       console.error('Error:', error);
@@ -38,13 +34,13 @@ const MP3Playlist = () => {
   }, []);
 
   const fetchAudioBlob = async (mp3File) => {
-    const response = await fetch(`https://crucial-brightly-monster.ngrok-free.app/api/play?file=${encodeURIComponent(mp3File)}`, {
-      headers: {
-        'ngrok-skip-browser-warning': '4567'
-      }
-    });
-    const blob = await response.blob();
-    return URL.createObjectURL(blob);
+    try {
+      const response = await customFetch(`/api/play?file=${encodeURIComponent(mp3File)}`, { responseType: 'blob' });
+      const blob = await response.blob();
+      return URL.createObjectURL(blob);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const playAudio = async (mp3File, index) => {
@@ -62,6 +58,23 @@ const MP3Playlist = () => {
     setIsPlaying(false);
   };
 
+  const handleDownload = async (mp3File, e) => {
+    e.preventDefault();
+    try {
+      const response = await customFetch(`/api/download?file=${encodeURIComponent(mp3File)}`, { responseType: 'blob' });
+      const blob = await response.blob();
+      const downloadUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = mp3File;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   return (
     <div className="mp3-container">
       <div className="playlist-container">
@@ -70,19 +83,18 @@ const MP3Playlist = () => {
             <div key={index} className="playlist-item" onClick={() => playAudio(mp3File, index)}>
               <img src={music2} alt={`Track ${index + 1}`} />
               <span>{`Track ${index + 1}: ${mp3File}`}</span>
-              <button className="download-button" onClick={(e) => { e.preventDefault(); window.location.href = `https://crucial-brightly-monster.ngrok-free.app/api/download?file=${encodeURIComponent(mp3File)}`; }}>
+              <button className="download-button" onClick={(e) => handleDownload(mp3File, e)}>
                 <FontAwesomeIcon icon={faDownload} />
               </button>
             </div>
           ))}
         </div>
       </div>
-
       <AudioPlayer
         src={audioFile || ''}
         autoPlayAfterSrcChange={false}
         customAdditionalControls={[
-          <div>
+          <div key="now-playing">
             {isPlaying && currentTrackIndex !== null && (
               <div className="now-playing">
                 Now Playing: Track {currentTrackIndex + 1}

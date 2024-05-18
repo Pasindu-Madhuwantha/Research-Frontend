@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './LoFiMusicCustomizer.css';
+import { customFetch } from '../CustomFetch/customFetch';
 
 const LoFiMusicCustomizer = () => {
   const [vinyls, setVinyls] = useState([]);
@@ -11,28 +12,13 @@ const LoFiMusicCustomizer = () => {
 
   const fetchPaths = async () => {
     try {
-      const vinylsResponse = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/vinyls', {
-        headers: {
-          'ngrok-skip-browser-warning': '4567'
-        }
-      });
-      const vinylsData = await vinylsResponse.json();
+      const vinylsData = await customFetch('/api/vinyls');
       setVinyls(vinylsData.paths);
 
-      const drumsResponse = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/drums', {
-        headers: {
-          'ngrok-skip-browser-warning': '4567'
-        }
-      });
-      const drumsData = await drumsResponse.json();
+      const drumsData = await customFetch('/api/drums');
       setDrums(drumsData.paths);
 
-      const weatherResponse = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/weather', {
-        headers: {
-          'ngrok-skip-browser-warning': '4567'
-        }
-      });
-      const weatherData = await weatherResponse.json();
+      const weatherData = await customFetch('/api/weather');
       setWeather(weatherData.paths);
     } catch (error) {
       console.error('Error fetching paths:', error);
@@ -59,7 +45,6 @@ const LoFiMusicCustomizer = () => {
     } else {
       setFileTypeError(false);
       setIsMidiFileSelected(!!file);
-      // Handle file upload logic if needed
     }
   };
 
@@ -68,7 +53,6 @@ const LoFiMusicCustomizer = () => {
 
     setShowMessage(true);
 
-    // Set default values for sounds if they are not selected
     const updatedWeatherSound = weatherSound || defaultWeatherSound;
     const updatedDrumsSound = drumsSound || defaultDrumsSound;
     const updatedVinylSound = vinylSound || defaultVinylSound;
@@ -80,22 +64,16 @@ const LoFiMusicCustomizer = () => {
     formData.append('vinylSound', updatedVinylSound);
 
     try {
-      const response = await fetch('https://crucial-brightly-monster.ngrok-free.app/upload', {
+      const response = await customFetch('/upload', {
         method: 'POST',
-        headers: {
-          'ngrok-skip-browser-warning': '4567'
-        },
         body: formData,
       });
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
-      // Handle success if needed
     } catch (error) {
       console.error('Error:', error);
-      // Handle errors
     } finally {
       setTimeout(() => {
         setShowMessage(false);
