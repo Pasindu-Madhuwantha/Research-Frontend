@@ -15,7 +15,7 @@ const MP3Playlist = () => {
 
   const fetchPlaylist = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/playlist');
+      const response = await fetch('/api/playlist');
       const data = await response.json();
       setPlaylist(data.playlist);
     } catch (error) {
@@ -34,7 +34,7 @@ const MP3Playlist = () => {
   }, []);
 
   const fetchAudioBlob = async (mp3File) => {
-    const response = await fetch(`http://localhost:5000/api/play?file=${encodeURIComponent(mp3File)}`);
+    const response = await fetch(`/api/play?file=${encodeURIComponent(mp3File)}`);
     const blob = await response.blob();
     return URL.createObjectURL(blob);
   };
@@ -62,7 +62,7 @@ const MP3Playlist = () => {
             <div key={index} className="playlist-item" onClick={() => playAudio(mp3File, index)}>
               <img src={music2} alt={`Track ${index + 1}`} />
               <span>{`Track ${index + 1}: ${mp3File}`}</span>
-              <button className="download-button" onClick={(e) => { e.preventDefault(); window.location.href = `http://localhost:5000/api/download?file=${encodeURIComponent(mp3File)}`; }}>
+              <button className="download-button" onClick={(e) => { e.preventDefault(); window.location.href = `/api/download?file=${encodeURIComponent(mp3File)}`; }}>
                 <FontAwesomeIcon icon={faDownload} />
               </button>
             </div>

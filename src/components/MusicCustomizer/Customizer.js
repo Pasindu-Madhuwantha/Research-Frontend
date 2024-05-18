@@ -11,15 +11,15 @@ const LoFiMusicCustomizer = () => {
 
   const fetchPaths = async () => {
     try {
-      const vinylsResponse = await fetch('http://localhost:8080/api/vinyls');
+      const vinylsResponse = await fetch('/api/vinyls');
       const vinylsData = await vinylsResponse.json();
       setVinyls(vinylsData.paths);
 
-      const drumsResponse = await fetch('http://localhost:8080/api/drums');
+      const drumsResponse = await fetch('/api/drums');
       const drumsData = await drumsResponse.json();
       setDrums(drumsData.paths);
 
-      const weatherResponse = await fetch('http://localhost:8080/api/weather');
+      const weatherResponse = await fetch('/api/weather');
       const weatherData = await weatherResponse.json();
       setWeather(weatherData.paths);
     } catch (error) {
@@ -68,7 +68,7 @@ const LoFiMusicCustomizer = () => {
     formData.append('vinylSound', updatedVinylSound);
   
     try {
-      const response = await fetch('http://localhost:5000/upload', {
+      const response = await fetch('/upload', {
         method: 'POST',
         body: formData,
       });
