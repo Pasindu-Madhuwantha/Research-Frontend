@@ -11,15 +11,15 @@ const LoFiMusicCustomizer = () => {
 
   const fetchPaths = async () => {
     try {
-      const vinylsResponse = await fetch('/api/vinyls');
+      const vinylsResponse = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/vinyls');
       const vinylsData = await vinylsResponse.json();
       setVinyls(vinylsData.paths);
 
-      const drumsResponse = await fetch('/api/drums');
+      const drumsResponse = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/drums');
       const drumsData = await drumsResponse.json();
       setDrums(drumsData.paths);
 
-      const weatherResponse = await fetch('/api/weather');
+      const weatherResponse = await fetch('https://crucial-brightly-monster.ngrok-free.app/api/weather');
       const weatherData = await weatherResponse.json();
       setWeather(weatherData.paths);
     } catch (error) {
@@ -68,7 +68,7 @@ const LoFiMusicCustomizer = () => {
     formData.append('vinylSound', updatedVinylSound);
   
     try {
-      const response = await fetch('/upload', {
+      const response = await fetch('https://crucial-brightly-monster.ngrok-free.app/upload', {
         method: 'POST',
         body: formData,
       });
